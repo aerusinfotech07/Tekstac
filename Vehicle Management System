@@ -1,0 +1,264 @@
+---
+
+# ✅ Vehicle Management System
+
+## 🧾 Problem Statement
+
+Develop a Java application to manage vehicle details using three classes:
+`Vehicle`, `VehicleUtil`, and `UserInterface`.
+
+---
+
+## 🚗 Class 1: Vehicle
+
+Create a class named `Vehicle` with the following private attributes:
+
+* `int vehicleId` – unique identifier of the vehicle
+* `String vehicleModel` – model name of the vehicle
+* `double vehicleMileage` – mileage of the vehicle
+* `String vehicleType` – type of vehicle (petrol/diesel/electric)
+
+### Requirements:
+
+* All attributes must be **private**
+* Provide **public getter and setter methods**
+* ❌ No business logic in this class
+
+---
+
+## 🛠️ Class 2: VehicleUtil
+
+Create a utility class named `VehicleUtil`.
+
+### Attribute:
+
+* `List<Vehicle> vehicleList` – stores vehicle objects
+
+### Methods:
+
+1. **addVehicle(Vehicle vehicle)**
+
+   * Adds the given vehicle object to the list
+
+2. **getVehicleById(int id)**
+
+   * Returns the Vehicle object whose `vehicleId` matches the given id
+   * Returns `null` if no matching vehicle is found
+
+3. **getMaxMileageVehicle()**
+
+   * Finds the **maximum mileage** among all vehicles
+   * Returns a `List<Vehicle>` containing all vehicles with that maximum mileage
+   * If the list is empty, return an empty list
+
+---
+
+## 🖥️ Class 3: UserInterface
+
+Create a class `UserInterface` with the `main` method.
+
+---
+
+## 📥 Input Format
+
+The vehicle details must be entered as one string using `:` as a separator:
+
+```
+vehicleId:vehicleModel:vehicleMileage:vehicleType
+```
+
+### Example:
+
+```
+101:HondaCity:18.5:petrol
+```
+
+---
+
+## 📌 Responsibilities:
+
+* Read the number of vehicles
+* For each vehicle:
+
+  * Read details in **single string format**
+  * Split the string and set values into a `Vehicle` object
+  * Add vehicle object to `VehicleUtil`
+* Search a vehicle by ID
+* Display vehicle details if found
+* Display vehicle(s) having the **maximum mileage**
+* Display appropriate message if not found
+
+---
+
+## 🧪 Sample Input
+
+```
+Enter number of vehicles:
+3
+
+Enter vehicle details:
+101:HondaCity:18.5:petrol
+102:TeslaModel3:22.0:electric
+103:HyundaiVerna:22.0:diesel
+
+Enter vehicle ID to search:
+102
+```
+
+---
+
+## 📤 Sample Output
+
+```
+Vehicle Found:
+Vehicle ID: 102
+Vehicle Model: TeslaModel3
+Mileage: 22.0
+Vehicle Type: electric
+
+Vehicle(s) with Maximum Mileage:
+Vehicle ID: 102, Model: TeslaModel3, Mileage: 22.0, Type: electric
+Vehicle ID: 103, Model: HyundaiVerna, Mileage: 22.0, Type: diesel
+```
+
+---
+
+# 💻 Complete Java Solution
+
+```java
+import java.util.*;
+
+// Class 1: Vehicle
+class Vehicle {
+    private int vehicleId;
+    private String vehicleModel;
+    private double vehicleMileage;
+    private String vehicleType;
+
+    public int getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(int vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
+    public String getVehicleModel() {
+        return vehicleModel;
+    }
+
+    public void setVehicleModel(String vehicleModel) {
+        this.vehicleModel = vehicleModel;
+    }
+
+    public double getVehicleMileage() {
+        return vehicleMileage;
+    }
+
+    public void setVehicleMileage(double vehicleMileage) {
+        this.vehicleMileage = vehicleMileage;
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+}
+
+// Class 2: VehicleUtil
+class VehicleUtil {
+    private List<Vehicle> vehicleList = new ArrayList<>();
+
+    public void addVehicle(Vehicle vehicle) {
+        vehicleList.add(vehicle);
+    }
+
+    public Vehicle getVehicleById(int id) {
+        for (Vehicle v : vehicleList) {
+            if (v.getVehicleId() == id) {
+                return v;
+            }
+        }
+        return null;
+    }
+
+    public List<Vehicle> getMaxMileageVehicle() {
+        List<Vehicle> result = new ArrayList<>();
+
+        if (vehicleList.isEmpty()) {
+            return result;
+        }
+
+        double max = vehicleList.get(0).getVehicleMileage();
+
+        for (Vehicle v : vehicleList) {
+            if (v.getVehicleMileage() > max) {
+                max = v.getVehicleMileage();
+            }
+        }
+
+        for (Vehicle v : vehicleList) {
+            if (v.getVehicleMileage() == max) {
+                result.add(v);
+            }
+        }
+
+        return result;
+    }
+}
+
+// Class 3: UserInterface
+public class UserInterface {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        VehicleUtil util = new VehicleUtil();
+
+        System.out.println("Enter number of vehicles:");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Enter vehicle details:");
+        for (int i = 0; i < n; i++) {
+            String input = sc.nextLine();
+            String[] data = input.split(":");
+
+            Vehicle v = new Vehicle();
+            v.setVehicleId(Integer.parseInt(data[0]));
+            v.setVehicleModel(data[1]);
+            v.setVehicleMileage(Double.parseDouble(data[2]));
+            v.setVehicleType(data[3]);
+
+            util.addVehicle(v);
+        }
+
+        System.out.println("Enter vehicle ID to search:");
+        int searchId = sc.nextInt();
+
+        Vehicle found = util.getVehicleById(searchId);
+
+        if (found != null) {
+            System.out.println("\nVehicle Found:");
+            System.out.println("Vehicle ID: " + found.getVehicleId());
+            System.out.println("Vehicle Model: " + found.getVehicleModel());
+            System.out.println("Mileage: " + found.getVehicleMileage());
+            System.out.println("Vehicle Type: " + found.getVehicleType());
+        } else {
+            System.out.println("Vehicle not found");
+        }
+
+        List<Vehicle> maxList = util.getMaxMileageVehicle();
+
+        System.out.println("\nVehicle(s) with Maximum Mileage:");
+        for (Vehicle v : maxList) {
+            System.out.println("Vehicle ID: " + v.getVehicleId() +
+                    ", Model: " + v.getVehicleModel() +
+                    ", Mileage: " + v.getVehicleMileage() +
+                    ", Type: " + v.getVehicleType());
+        }
+    }
+}
+```
+
