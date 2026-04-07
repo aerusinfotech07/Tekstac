@@ -1,0 +1,265 @@
+
+# ✅ Flight Management System
+
+## 🧾 Problem Statement
+
+Develop a Java application to manage flight details using three classes:
+`Flight`, `FlightUtil`, and `UserInterface`.
+
+---
+
+## ✈️ Class 1: Flight
+
+Create a class named `Flight` with the following private attributes:
+
+* `int flightId` – unique identifier of the flight
+* `String flightName` – name of the flight
+* `double ticketPrice` – ticket price of the flight
+* `String flightType` – type of flight (domestic/international)
+
+### Requirements:
+
+* All attributes must be **private**
+* Provide **public getter and setter methods**
+* ❌ No business logic in this class
+
+---
+
+## 🛠️ Class 2: FlightUtil
+
+Create a utility class named `FlightUtil`.
+
+### Attribute:
+
+* `List<Flight> flightList` – stores flight objects
+
+### Methods:
+
+1. **addFlight(Flight flight)**
+
+   * Adds the given flight object to the list
+
+2. **getFlightById(int id)**
+
+   * Returns the Flight object whose `flightId` matches the given id
+   * Returns `null` if no matching flight is found
+
+3. **getMaxPriceFlights()**
+
+   * Finds the **maximum ticket price** among all flights
+   * Returns a `List<Flight>` containing all flights with that maximum price
+   * If the list is empty, return an empty list
+
+---
+
+## 🖥️ Class 3: UserInterface
+
+Create a class `UserInterface` with the `main` method.
+
+---
+
+## 📥 Input Format
+
+The flight details must be entered as one string using `:` as a separator:
+
+```id="u7m3qx"
+flightId:flightName:ticketPrice:flightType
+```
+
+### Example:
+
+```id="r5t9vk"
+101:Indigo:4500:domestic
+```
+
+---
+
+## 📌 Responsibilities:
+
+* Read the number of flights
+* For each flight:
+
+  * Read details in **single string format**
+  * Split the string and set values into a `Flight` object
+  * Add flight object to `FlightUtil`
+* Search a flight by ID
+* Display flight details if found
+* Display flight(s) having the **maximum ticket price**
+* Display appropriate message if not found
+
+---
+
+## 🧪 Sample Input
+
+```id="k9d2pl"
+Enter number of flights:
+3
+
+Enter flight details:
+101:Indigo:4500:domestic
+102:AirIndia:12000:international
+103:SpiceJet:12000:domestic
+
+Enter flight ID to search:
+102
+```
+
+---
+
+## 📤 Sample Output
+
+```id="x4n8zb"
+Flight Found:
+Flight ID: 102
+Flight Name: AirIndia
+Ticket Price: 12000.0
+Flight Type: international
+
+Flights with Maximum Ticket Price:
+Flight ID: 102, Name: AirIndia, Price: 12000.0, Type: international
+Flight ID: 103, Name: SpiceJet, Price: 12000.0, Type: domestic
+```
+
+---
+
+# 💻 Complete Java Solution
+
+```java id="z8p6kc"
+import java.util.*;
+
+// Class 1: Flight
+class Flight {
+    private int flightId;
+    private String flightName;
+    private double ticketPrice;
+    private String flightType;
+
+    public int getFlightId() {
+        return flightId;
+    }
+
+    public void setFlightId(int flightId) {
+        this.flightId = flightId;
+    }
+
+    public String getFlightName() {
+        return flightName;
+    }
+
+    public void setFlightName(String flightName) {
+        this.flightName = flightName;
+    }
+
+    public double getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(double ticketPrice) {
+        this.ticketPrice = ticketPrice;
+    }
+
+    public String getFlightType() {
+        return flightType;
+    }
+
+    public void setFlightType(String flightType) {
+        this.flightType = flightType;
+    }
+}
+
+// Class 2: FlightUtil
+class FlightUtil {
+    private List<Flight> flightList = new ArrayList<>();
+
+    public void addFlight(Flight flight) {
+        flightList.add(flight);
+    }
+
+    public Flight getFlightById(int id) {
+        for (Flight f : flightList) {
+            if (f.getFlightId() == id) {
+                return f;
+            }
+        }
+        return null;
+    }
+
+    public List<Flight> getMaxPriceFlights() {
+        List<Flight> result = new ArrayList<>();
+
+        if (flightList.isEmpty()) {
+            return result;
+        }
+
+        double max = flightList.get(0).getTicketPrice();
+
+        for (Flight f : flightList) {
+            if (f.getTicketPrice() > max) {
+                max = f.getTicketPrice();
+            }
+        }
+
+        for (Flight f : flightList) {
+            if (f.getTicketPrice() == max) {
+                result.add(f);
+            }
+        }
+
+        return result;
+    }
+}
+
+// Class 3: UserInterface
+public class UserInterface {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        FlightUtil util = new FlightUtil();
+
+        System.out.println("Enter number of flights:");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Enter flight details:");
+        for (int i = 0; i < n; i++) {
+            String input = sc.nextLine();
+            String[] data = input.split(":");
+
+            Flight f = new Flight();
+            f.setFlightId(Integer.parseInt(data[0]));
+            f.setFlightName(data[1]);
+            f.setTicketPrice(Double.parseDouble(data[2]));
+            f.setFlightType(data[3]);
+
+            util.addFlight(f);
+        }
+
+        System.out.println("Enter flight ID to search:");
+        int searchId = sc.nextInt();
+
+        Flight found = util.getFlightById(searchId);
+
+        if (found != null) {
+            System.out.println("\nFlight Found:");
+            System.out.println("Flight ID: " + found.getFlightId());
+            System.out.println("Flight Name: " + found.getFlightName());
+            System.out.println("Ticket Price: " + found.getTicketPrice());
+            System.out.println("Flight Type: " + found.getFlightType());
+        } else {
+            System.out.println("Flight not found");
+        }
+
+        List<Flight> maxList = util.getMaxPriceFlights();
+
+        System.out.println("\nFlights with Maximum Ticket Price:");
+        for (Flight f : maxList) {
+            System.out.println("Flight ID: " + f.getFlightId() +
+                    ", Name: " + f.getFlightName() +
+                    ", Price: " + f.getTicketPrice() +
+                    ", Type: " + f.getFlightType());
+        }
+    }
+}
+```
+
+---
+
