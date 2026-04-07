@@ -1,0 +1,265 @@
+
+# ✅ Product Inventory Management System
+
+## 🧾 Problem Statement
+
+Develop a Java application to manage product details using three classes:
+`Product`, `ProductUtil`, and `UserInterface`.
+
+---
+
+## 📦 Class 1: Product
+
+Create a class named `Product` with the following private attributes:
+
+* `int productId` – unique identifier of the product
+* `String productName` – name of the product
+* `double productPrice` – price of the product
+* `String productCategory` – category of the product (electronics/grocery/clothing)
+
+### Requirements:
+
+* All attributes must be **private**
+* Provide **public getter and setter methods**
+* ❌ No business logic in this class
+
+---
+
+## 🛠️ Class 2: ProductUtil
+
+Create a utility class named `ProductUtil`.
+
+### Attribute:
+
+* `List<Product> productList` – stores product objects
+
+### Methods:
+
+1. **addProduct(Product product)**
+
+   * Adds the given product object to the list
+
+2. **getProductById(int id)**
+
+   * Returns the Product object whose `productId` matches the given id
+   * Returns `null` if no matching product is found
+
+3. **getMaxPriceProducts()**
+
+   * Finds the **maximum product price** among all products
+   * Returns a `List<Product>` containing all products with that maximum price
+   * If the list is empty, return an empty list
+
+---
+
+## 🖥️ Class 3: UserInterface
+
+Create a class `UserInterface` with the `main` method.
+
+---
+
+## 📥 Input Format
+
+The product details must be entered as one string using `:` as a separator:
+
+```
+productId:productName:productPrice:productCategory
+```
+
+### Example:
+
+```
+101:Laptop:75000:electronics
+```
+
+---
+
+## 📌 Responsibilities:
+
+* Read the number of products
+* For each product:
+
+  * Read details in **single string format**
+  * Split the string and set values into a `Product` object
+  * Add product object to `ProductUtil`
+* Search a product by ID
+* Display product details if found
+* Display product(s) having the **maximum price**
+* Display appropriate message if not found
+
+---
+
+## 🧪 Sample Input
+
+```
+Enter number of products:
+3
+
+Enter product details:
+101:Laptop:75000:electronics
+102:Mobile:50000:electronics
+103:TV:75000:electronics
+
+Enter product ID to search:
+102
+```
+
+---
+
+## 📤 Sample Output
+
+```
+Product Found:
+Product ID: 102
+Product Name: Mobile
+Product Price: 50000.0
+Product Category: electronics
+
+Products with Maximum Price:
+Product ID: 101, Name: Laptop, Price: 75000.0, Category: electronics
+Product ID: 103, Name: TV, Price: 75000.0, Category: electronics
+```
+
+---
+
+# 💻 Complete Java Solution
+
+```java
+import java.util.*;
+
+// Class 1: Product
+class Product {
+    private int productId;
+    private String productName;
+    private double productPrice;
+    private String productCategory;
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public double getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductPrice(double productPrice) {
+        this.productPrice = productPrice;
+    }
+
+    public String getProductCategory() {
+        return productCategory;
+    }
+
+    public void setProductCategory(String productCategory) {
+        this.productCategory = productCategory;
+    }
+}
+
+// Class 2: ProductUtil
+class ProductUtil {
+    private List<Product> productList = new ArrayList<>();
+
+    public void addProduct(Product product) {
+        productList.add(product);
+    }
+
+    public Product getProductById(int id) {
+        for (Product p : productList) {
+            if (p.getProductId() == id) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public List<Product> getMaxPriceProducts() {
+        List<Product> result = new ArrayList<>();
+
+        if (productList.isEmpty()) {
+            return result;
+        }
+
+        double max = productList.get(0).getProductPrice();
+
+        for (Product p : productList) {
+            if (p.getProductPrice() > max) {
+                max = p.getProductPrice();
+            }
+        }
+
+        for (Product p : productList) {
+            if (p.getProductPrice() == max) {
+                result.add(p);
+            }
+        }
+
+        return result;
+    }
+}
+
+// Class 3: UserInterface
+public class UserInterface {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ProductUtil util = new ProductUtil();
+
+        System.out.println("Enter number of products:");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Enter product details:");
+        for (int i = 0; i < n; i++) {
+            String input = sc.nextLine();
+            String[] data = input.split(":");
+
+            Product p = new Product();
+            p.setProductId(Integer.parseInt(data[0]));
+            p.setProductName(data[1]);
+            p.setProductPrice(Double.parseDouble(data[2]));
+            p.setProductCategory(data[3]);
+
+            util.addProduct(p);
+        }
+
+        System.out.println("Enter product ID to search:");
+        int searchId = sc.nextInt();
+
+        Product found = util.getProductById(searchId);
+
+        if (found != null) {
+            System.out.println("\nProduct Found:");
+            System.out.println("Product ID: " + found.getProductId());
+            System.out.println("Product Name: " + found.getProductName());
+            System.out.println("Product Price: " + found.getProductPrice());
+            System.out.println("Product Category: " + found.getProductCategory());
+        } else {
+            System.out.println("Product not found");
+        }
+
+        List<Product> maxList = util.getMaxPriceProducts();
+
+        System.out.println("\nProducts with Maximum Price:");
+        for (Product p : maxList) {
+            System.out.println("Product ID: " + p.getProductId() +
+                    ", Name: " + p.getProductName() +
+                    ", Price: " + p.getProductPrice() +
+                    ", Category: " + p.getProductCategory());
+        }
+    }
+}
+```
+
+---
+
