@@ -1,0 +1,267 @@
+
+---
+
+# ✅ Hospital Patient Management System
+
+## 🧾 Problem Statement
+
+Develop a Java application to manage patient details using three classes:
+`Patient`, `PatientUtil`, and `UserInterface`.
+
+---
+
+## 🏥 Class 1: Patient
+
+Create a class named `Patient` with the following private attributes:
+
+* `int patientId` – unique identifier of the patient
+* `String patientName` – name of the patient
+* `int patientAge` – age of the patient
+* `String disease` – disease of the patient
+
+### Requirements:
+
+* All attributes must be **private**
+* Provide **public getter and setter methods**
+* ❌ No business logic in this class
+
+---
+
+## 🛠️ Class 2: PatientUtil
+
+Create a utility class named `PatientUtil`.
+
+### Attribute:
+
+* `List<Patient> patientList` – stores patient objects
+
+### Methods:
+
+1. **addPatient(Patient patient)**
+
+   * Adds the given patient object to the list
+
+2. **getPatientById(int id)**
+
+   * Returns the Patient object whose `patientId` matches the given id
+   * Returns `null` if no matching patient is found
+
+3. **getOldestPatients()**
+
+   * Finds the **maximum age** among all patients
+   * Returns a `List<Patient>` containing all patients with that maximum age
+   * If the list is empty, return an empty list
+
+---
+
+## 🖥️ Class 3: UserInterface
+
+Create a class `UserInterface` with the `main` method.
+
+---
+
+## 📥 Input Format
+
+The patient details must be entered as one string using `:` as a separator:
+
+```id="h8r9pq"
+patientId:patientName:patientAge:disease
+```
+
+### Example:
+
+```id="3l2k7m"
+101:Amit:65:Diabetes
+```
+
+---
+
+## 📌 Responsibilities:
+
+* Read the number of patients
+* For each patient:
+
+  * Read details in **single string format**
+  * Split the string and set values into a `Patient` object
+  * Add patient object to `PatientUtil`
+* Search a patient by ID
+* Display patient details if found
+* Display patient(s) having the **maximum age**
+* Display appropriate message if not found
+
+---
+
+## 🧪 Sample Input
+
+```id="z6y3wt"
+Enter number of patients:
+3
+
+Enter patient details:
+101:Amit:65:Diabetes
+102:Ravi:70:Hypertension
+103:Suresh:70:Cardiac
+
+Enter patient ID to search:
+102
+```
+
+---
+
+## 📤 Sample Output
+
+```id="v9k4nx"
+Patient Found:
+Patient ID: 102
+Patient Name: Ravi
+Patient Age: 70
+Disease: Hypertension
+
+Oldest Patients:
+Patient ID: 102, Name: Ravi, Age: 70, Disease: Hypertension
+Patient ID: 103, Name: Suresh, Age: 70, Disease: Cardiac
+```
+
+---
+
+# 💻 Complete Java Solution
+
+```java id="q7n2xz"
+import java.util.*;
+
+// Class 1: Patient
+class Patient {
+    private int patientId;
+    private String patientName;
+    private int patientAge;
+    private String disease;
+
+    public int getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(int patientId) {
+        this.patientId = patientId;
+    }
+
+    public String getPatientName() {
+        return patientName;
+    }
+
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
+    }
+
+    public int getPatientAge() {
+        return patientAge;
+    }
+
+    public void setPatientAge(int patientAge) {
+        this.patientAge = patientAge;
+    }
+
+    public String getDisease() {
+        return disease;
+    }
+
+    public void setDisease(String disease) {
+        this.disease = disease;
+    }
+}
+
+// Class 2: PatientUtil
+class PatientUtil {
+    private List<Patient> patientList = new ArrayList<>();
+
+    public void addPatient(Patient patient) {
+        patientList.add(patient);
+    }
+
+    public Patient getPatientById(int id) {
+        for (Patient p : patientList) {
+            if (p.getPatientId() == id) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public List<Patient> getOldestPatients() {
+        List<Patient> result = new ArrayList<>();
+
+        if (patientList.isEmpty()) {
+            return result;
+        }
+
+        int max = patientList.get(0).getPatientAge();
+
+        for (Patient p : patientList) {
+            if (p.getPatientAge() > max) {
+                max = p.getPatientAge();
+            }
+        }
+
+        for (Patient p : patientList) {
+            if (p.getPatientAge() == max) {
+                result.add(p);
+            }
+        }
+
+        return result;
+    }
+}
+
+// Class 3: UserInterface
+public class UserInterface {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        PatientUtil util = new PatientUtil();
+
+        System.out.println("Enter number of patients:");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Enter patient details:");
+        for (int i = 0; i < n; i++) {
+            String input = sc.nextLine();
+            String[] data = input.split(":");
+
+            Patient p = new Patient();
+            p.setPatientId(Integer.parseInt(data[0]));
+            p.setPatientName(data[1]);
+            p.setPatientAge(Integer.parseInt(data[2]));
+            p.setDisease(data[3]);
+
+            util.addPatient(p);
+        }
+
+        System.out.println("Enter patient ID to search:");
+        int searchId = sc.nextInt();
+
+        Patient found = util.getPatientById(searchId);
+
+        if (found != null) {
+            System.out.println("\nPatient Found:");
+            System.out.println("Patient ID: " + found.getPatientId());
+            System.out.println("Patient Name: " + found.getPatientName());
+            System.out.println("Patient Age: " + found.getPatientAge());
+            System.out.println("Disease: " + found.getDisease());
+        } else {
+            System.out.println("Patient not found");
+        }
+
+        List<Patient> maxList = util.getOldestPatients();
+
+        System.out.println("\nOldest Patients:");
+        for (Patient p : maxList) {
+            System.out.println("Patient ID: " + p.getPatientId() +
+                    ", Name: " + p.getPatientName() +
+                    ", Age: " + p.getPatientAge() +
+                    ", Disease: " + p.getDisease());
+        }
+    }
+}
+```
+
+---
+
