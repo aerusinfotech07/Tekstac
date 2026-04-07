@@ -1,0 +1,269 @@
+Here is your **Aircraft Management System** in the **exact structured format + complete solution** 👇
+
+---
+
+# ✅ Aircraft Management System
+
+## 🧾 Problem Statement
+
+Develop a Java application to manage aircraft details using three classes:
+`Aircraft`, `AircraftUtil`, and `UserInterface`.
+
+---
+
+## ✈️ Class 1: Aircraft
+
+Create a class named `Aircraft` with the following private attributes:
+
+* `int aircraftId` – unique identifier of the aircraft
+* `String aircraftModel` – model name of the aircraft
+* `double aircraftFuelEfficiency` – fuel efficiency
+* `String aircraftType` – type of aircraft (public/private)
+
+### Requirements:
+
+* All attributes must be **private**
+* Provide **public getter and setter methods**
+* ❌ No business logic in this class
+
+---
+
+## 🛠️ Class 2: AircraftUtil
+
+Create a utility class named `AircraftUtil`.
+
+### Attribute:
+
+* `List<Aircraft> aircraftList` – stores aircraft objects
+
+### Methods:
+
+1. **addAircraft(Aircraft aircraft)**
+
+   * Adds the given aircraft object to the list
+
+2. **getAircraftById(int id)**
+
+   * Returns the Aircraft object whose `aircraftId` matches the given id
+   * Returns `null` if no matching aircraft is found
+
+3. **getMaxFuelEfficiencyAircraft()**
+
+   * Finds the **maximum fuel efficiency** among all aircraft
+   * Returns a `List<Aircraft>` containing all aircraft with that maximum fuel efficiency
+   * If the list is empty, return an empty list
+
+---
+
+## 🖥️ Class 3: UserInterface
+
+Create a class `UserInterface` with the `main` method.
+
+---
+
+## 📥 Input Format
+
+The aircraft details must be entered as one string using `:` as a separator:
+
+```
+aircraftId:aircraftModel:aircraftFuelEfficiency:aircraftType
+```
+
+### Example:
+
+```
+101:AirIndia:15.5:public
+```
+
+---
+
+## 📌 Responsibilities:
+
+* Read the number of aircraft
+* For each aircraft:
+
+  * Read details in **single string format**
+  * Split the string and set values into an `Aircraft` object
+  * Add aircraft object to `AircraftUtil`
+* Search an aircraft by ID
+* Display aircraft details if found
+* Display aircraft(s) having the **maximum fuel efficiency**
+* Display suitable messages when data is not found
+
+---
+
+## 🧪 Sample Input
+
+```
+Enter number of aircraft:
+3
+
+Enter aircraft details:
+101:AirIndia:15.5:public
+102:Indigo:17.2:private
+103:Vistara:17.2:public
+
+Enter aircraft ID to search:
+102
+```
+
+---
+
+## 📤 Sample Output
+
+```
+Aircraft Found:
+Aircraft ID: 102
+Aircraft Model: Indigo
+Fuel Efficiency: 17.2
+Aircraft Type: private
+
+Aircraft(s) with Maximum Fuel Efficiency:
+Aircraft ID: 102, Model: Indigo, Fuel Efficiency: 17.2, Type: private
+Aircraft ID: 103, Model: Vistara, Fuel Efficiency: 17.2, Type: public
+```
+
+---
+
+# 💻 Complete Java Solution
+
+```java
+import java.util.*;
+
+// Class 1: Aircraft
+class Aircraft {
+    private int aircraftId;
+    private String aircraftModel;
+    private double aircraftFuelEfficiency;
+    private String aircraftType;
+
+    public int getAircraftId() {
+        return aircraftId;
+    }
+
+    public void setAircraftId(int aircraftId) {
+        this.aircraftId = aircraftId;
+    }
+
+    public String getAircraftModel() {
+        return aircraftModel;
+    }
+
+    public void setAircraftModel(String aircraftModel) {
+        this.aircraftModel = aircraftModel;
+    }
+
+    public double getAircraftFuelEfficiency() {
+        return aircraftFuelEfficiency;
+    }
+
+    public void setAircraftFuelEfficiency(double aircraftFuelEfficiency) {
+        this.aircraftFuelEfficiency = aircraftFuelEfficiency;
+    }
+
+    public String getAircraftType() {
+        return aircraftType;
+    }
+
+    public void setAircraftType(String aircraftType) {
+        this.aircraftType = aircraftType;
+    }
+}
+
+// Class 2: AircraftUtil
+class AircraftUtil {
+    private List<Aircraft> aircraftList = new ArrayList<>();
+
+    public void addAircraft(Aircraft aircraft) {
+        aircraftList.add(aircraft);
+    }
+
+    public Aircraft getAircraftById(int id) {
+        for (Aircraft a : aircraftList) {
+            if (a.getAircraftId() == id) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    public List<Aircraft> getMaxFuelEfficiencyAircraft() {
+        List<Aircraft> result = new ArrayList<>();
+
+        if (aircraftList.isEmpty()) {
+            return result;
+        }
+
+        double max = aircraftList.get(0).getAircraftFuelEfficiency();
+
+        for (Aircraft a : aircraftList) {
+            if (a.getAircraftFuelEfficiency() > max) {
+                max = a.getAircraftFuelEfficiency();
+            }
+        }
+
+        for (Aircraft a : aircraftList) {
+            if (a.getAircraftFuelEfficiency() == max) {
+                result.add(a);
+            }
+        }
+
+        return result;
+    }
+}
+
+// Class 3: UserInterface
+public class UserInterface {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        AircraftUtil util = new AircraftUtil();
+
+        System.out.println("Enter number of aircraft:");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Enter aircraft details:");
+        for (int i = 0; i < n; i++) {
+            String input = sc.nextLine();
+            String[] data = input.split(":");
+
+            Aircraft a = new Aircraft();
+            a.setAircraftId(Integer.parseInt(data[0]));
+            a.setAircraftModel(data[1]);
+            a.setAircraftFuelEfficiency(Double.parseDouble(data[2]));
+            a.setAircraftType(data[3]);
+
+            util.addAircraft(a);
+        }
+
+        System.out.println("Enter aircraft ID to search:");
+        int searchId = sc.nextInt();
+
+        Aircraft found = util.getAircraftById(searchId);
+
+        if (found != null) {
+            System.out.println("\nAircraft Found:");
+            System.out.println("Aircraft ID: " + found.getAircraftId());
+            System.out.println("Aircraft Model: " + found.getAircraftModel());
+            System.out.println("Fuel Efficiency: " + found.getAircraftFuelEfficiency());
+            System.out.println("Aircraft Type: " + found.getAircraftType());
+        } else {
+            System.out.println("Aircraft not found");
+        }
+
+        List<Aircraft> maxList = util.getMaxFuelEfficiencyAircraft();
+
+        System.out.println("\nAircraft(s) with Maximum Fuel Efficiency:");
+        for (Aircraft a : maxList) {
+            System.out.println("Aircraft ID: " + a.getAircraftId() +
+                    ", Model: " + a.getAircraftModel() +
+                    ", Fuel Efficiency: " + a.getAircraftFuelEfficiency() +
+                    ", Type: " + a.getAircraftType());
+        }
+    }
+}
+```
+
+---
+
+
