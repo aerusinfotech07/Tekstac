@@ -1,0 +1,265 @@
+
+# ✅ Movie Management System
+
+## 🧾 Problem Statement
+
+Develop a Java application to manage movie details using three classes:
+`Movie`, `MovieUtil`, and `UserInterface`.
+
+---
+
+## 🎬 Class 1: Movie
+
+Create a class named `Movie` with the following private attributes:
+
+* `int movieId` – unique identifier of the movie
+* `String movieName` – name of the movie
+* `double movieRating` – rating of the movie
+* `String movieType` – type of movie (action/drama/comedy)
+
+### Requirements:
+
+* All attributes must be **private**
+* Provide **public getter and setter methods**
+* ❌ No business logic in this class
+
+---
+
+## 🛠️ Class 2: MovieUtil
+
+Create a utility class named `MovieUtil`.
+
+### Attribute:
+
+* `List<Movie> movieList` – stores movie objects
+
+### Methods:
+
+1. **addMovie(Movie movie)**
+
+   * Adds the given movie object to the list
+
+2. **getMovieById(int id)**
+
+   * Returns the Movie object whose `movieId` matches the given id
+   * Returns `null` if no matching movie is found
+
+3. **getMaxRatedMovies()**
+
+   * Finds the **maximum movie rating** among all movies
+   * Returns a `List<Movie>` containing all movies with that maximum rating
+   * If the list is empty, return an empty list
+
+---
+
+## 🖥️ Class 3: UserInterface
+
+Create a class `UserInterface` with the `main` method.
+
+---
+
+## 📥 Input Format
+
+The movie details must be entered as one string using `:` as a separator:
+
+```id="2q9vde"
+movieId:movieName:movieRating:movieType
+```
+
+### Example:
+
+```id="3y8zkh"
+101:Inception:9.0:action
+```
+
+---
+
+## 📌 Responsibilities:
+
+* Read the number of movies
+* For each movie:
+
+  * Read details in **single string format**
+  * Split the string and set values into a `Movie` object
+  * Add movie object to `MovieUtil`
+* Search a movie by ID
+* Display movie details if found
+* Display movie(s) having the **maximum rating**
+* Display appropriate message if not found
+
+---
+
+## 🧪 Sample Input
+
+```id="r7n6tp"
+Enter number of movies:
+3
+
+Enter movie details:
+101:Inception:9.0:action
+102:Interstellar:9.5:drama
+103:DarkKnight:9.5:action
+
+Enter movie ID to search:
+102
+```
+
+---
+
+## 📤 Sample Output
+
+```id="k5u1xm"
+Movie Found:
+Movie ID: 102
+Movie Name: Interstellar
+Movie Rating: 9.5
+Movie Type: drama
+
+Movies with Maximum Rating:
+Movie ID: 102, Name: Interstellar, Rating: 9.5, Type: drama
+Movie ID: 103, Name: DarkKnight, Rating: 9.5, Type: action
+```
+
+---
+
+# 💻 Complete Java Solution
+
+```java id="4xq8nv"
+import java.util.*;
+
+// Class 1: Movie
+class Movie {
+    private int movieId;
+    private String movieName;
+    private double movieRating;
+    private String movieType;
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
+    }
+
+    public String getMovieName() {
+        return movieName;
+    }
+
+    public void setMovieName(String movieName) {
+        this.movieName = movieName;
+    }
+
+    public double getMovieRating() {
+        return movieRating;
+    }
+
+    public void setMovieRating(double movieRating) {
+        this.movieRating = movieRating;
+    }
+
+    public String getMovieType() {
+        return movieType;
+    }
+
+    public void setMovieType(String movieType) {
+        this.movieType = movieType;
+    }
+}
+
+// Class 2: MovieUtil
+class MovieUtil {
+    private List<Movie> movieList = new ArrayList<>();
+
+    public void addMovie(Movie movie) {
+        movieList.add(movie);
+    }
+
+    public Movie getMovieById(int id) {
+        for (Movie m : movieList) {
+            if (m.getMovieId() == id) {
+                return m;
+            }
+        }
+        return null;
+    }
+
+    public List<Movie> getMaxRatedMovies() {
+        List<Movie> result = new ArrayList<>();
+
+        if (movieList.isEmpty()) {
+            return result;
+        }
+
+        double max = movieList.get(0).getMovieRating();
+
+        for (Movie m : movieList) {
+            if (m.getMovieRating() > max) {
+                max = m.getMovieRating();
+            }
+        }
+
+        for (Movie m : movieList) {
+            if (m.getMovieRating() == max) {
+                result.add(m);
+            }
+        }
+
+        return result;
+    }
+}
+
+// Class 3: UserInterface
+public class UserInterface {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        MovieUtil util = new MovieUtil();
+
+        System.out.println("Enter number of movies:");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Enter movie details:");
+        for (int i = 0; i < n; i++) {
+            String input = sc.nextLine();
+            String[] data = input.split(":");
+
+            Movie m = new Movie();
+            m.setMovieId(Integer.parseInt(data[0]));
+            m.setMovieName(data[1]);
+            m.setMovieRating(Double.parseDouble(data[2]));
+            m.setMovieType(data[3]);
+
+            util.addMovie(m);
+        }
+
+        System.out.println("Enter movie ID to search:");
+        int searchId = sc.nextInt();
+
+        Movie found = util.getMovieById(searchId);
+
+        if (found != null) {
+            System.out.println("\nMovie Found:");
+            System.out.println("Movie ID: " + found.getMovieId());
+            System.out.println("Movie Name: " + found.getMovieName());
+            System.out.println("Movie Rating: " + found.getMovieRating());
+            System.out.println("Movie Type: " + found.getMovieType());
+        } else {
+            System.out.println("Movie not found");
+        }
+
+        List<Movie> maxList = util.getMaxRatedMovies();
+
+        System.out.println("\nMovies with Maximum Rating:");
+        for (Movie m : maxList) {
+            System.out.println("Movie ID: " + m.getMovieId() +
+                    ", Name: " + m.getMovieName() +
+                    ", Rating: " + m.getMovieRating() +
+                    ", Type: " + m.getMovieType());
+        }
+    }
+}
+```
+
+---
+
