@@ -1,0 +1,265 @@
+
+# ✅ Bank Account Management System
+
+## 🧾 Problem Statement
+
+Develop a Java application to manage bank account details using three classes:
+`Account`, `AccountUtil`, and `UserInterface`.
+
+---
+
+## 🏦 Class 1: Account
+
+Create a class named `Account` with the following private attributes:
+
+* `int accountId` – unique identifier of the account
+* `String accountHolderName` – name of the account holder
+* `double accountBalance` – balance in the account
+* `String accountType` – type of account (savings/current)
+
+### Requirements:
+
+* All attributes must be **private**
+* Provide **public getter and setter methods**
+* ❌ No business logic in this class
+
+---
+
+## 🛠️ Class 2: AccountUtil
+
+Create a utility class named `AccountUtil`.
+
+### Attribute:
+
+* `List<Account> accountList` – stores account objects
+
+### Methods:
+
+1. **addAccount(Account account)**
+
+   * Adds the given account object to the list
+
+2. **getAccountById(int id)**
+
+   * Returns the Account object whose `accountId` matches the given id
+   * Returns `null` if no matching account is found
+
+3. **getMaxBalanceAccounts()**
+
+   * Finds the **maximum account balance** among all accounts
+   * Returns a `List<Account>` containing all accounts with that maximum balance
+   * If the list is empty, return an empty list
+
+---
+
+## 🖥️ Class 3: UserInterface
+
+Create a class `UserInterface` with the `main` method.
+
+---
+
+## 📥 Input Format
+
+The account details must be entered as one string using `:` as a separator:
+
+```id="9n7xq1"
+accountId:accountHolderName:accountBalance:accountType
+```
+
+### Example:
+
+```id="3d2k8p"
+101:Vilas:95000:savings
+```
+
+---
+
+## 📌 Responsibilities:
+
+* Read the number of accounts
+* For each account:
+
+  * Read details in **single string format**
+  * Split the string and set values into an `Account` object
+  * Add account object to `AccountUtil`
+* Search an account by ID
+* Display account details if found
+* Display account(s) having the **maximum balance**
+* Display appropriate message if not found
+
+---
+
+## 🧪 Sample Input
+
+```id="m5v2xz"
+Enter number of accounts:
+3
+
+Enter account details:
+101:Vilas:95000:savings
+102:Amit:120000:current
+103:Ravi:120000:savings
+
+Enter account ID to search:
+102
+```
+
+---
+
+## 📤 Sample Output
+
+```id="t8w6gh"
+Account Found:
+Account ID: 102
+Account Holder Name: Amit
+Account Balance: 120000.0
+Account Type: current
+
+Accounts with Maximum Balance:
+Account ID: 102, Name: Amit, Balance: 120000.0, Type: current
+Account ID: 103, Name: Ravi, Balance: 120000.0, Type: savings
+```
+
+---
+
+# 💻 Complete Java Solution
+
+```java id="6q4zjp"
+import java.util.*;
+
+// Class 1: Account
+class Account {
+    private int accountId;
+    private String accountHolderName;
+    private double accountBalance;
+    private String accountType;
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
+    public String getAccountHolderName() {
+        return accountHolderName;
+    }
+
+    public void setAccountHolderName(String accountHolderName) {
+        this.accountHolderName = accountHolderName;
+    }
+
+    public double getAccountBalance() {
+        return accountBalance;
+    }
+
+    public void setAccountBalance(double accountBalance) {
+        this.accountBalance = accountBalance;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+}
+
+// Class 2: AccountUtil
+class AccountUtil {
+    private List<Account> accountList = new ArrayList<>();
+
+    public void addAccount(Account account) {
+        accountList.add(account);
+    }
+
+    public Account getAccountById(int id) {
+        for (Account a : accountList) {
+            if (a.getAccountId() == id) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    public List<Account> getMaxBalanceAccounts() {
+        List<Account> result = new ArrayList<>();
+
+        if (accountList.isEmpty()) {
+            return result;
+        }
+
+        double max = accountList.get(0).getAccountBalance();
+
+        for (Account a : accountList) {
+            if (a.getAccountBalance() > max) {
+                max = a.getAccountBalance();
+            }
+        }
+
+        for (Account a : accountList) {
+            if (a.getAccountBalance() == max) {
+                result.add(a);
+            }
+        }
+
+        return result;
+    }
+}
+
+// Class 3: UserInterface
+public class UserInterface {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        AccountUtil util = new AccountUtil();
+
+        System.out.println("Enter number of accounts:");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Enter account details:");
+        for (int i = 0; i < n; i++) {
+            String input = sc.nextLine();
+            String[] data = input.split(":");
+
+            Account a = new Account();
+            a.setAccountId(Integer.parseInt(data[0]));
+            a.setAccountHolderName(data[1]);
+            a.setAccountBalance(Double.parseDouble(data[2]));
+            a.setAccountType(data[3]);
+
+            util.addAccount(a);
+        }
+
+        System.out.println("Enter account ID to search:");
+        int searchId = sc.nextInt();
+
+        Account found = util.getAccountById(searchId);
+
+        if (found != null) {
+            System.out.println("\nAccount Found:");
+            System.out.println("Account ID: " + found.getAccountId());
+            System.out.println("Account Holder Name: " + found.getAccountHolderName());
+            System.out.println("Account Balance: " + found.getAccountBalance());
+            System.out.println("Account Type: " + found.getAccountType());
+        } else {
+            System.out.println("Account not found");
+        }
+
+        List<Account> maxList = util.getMaxBalanceAccounts();
+
+        System.out.println("\nAccounts with Maximum Balance:");
+        for (Account a : maxList) {
+            System.out.println("Account ID: " + a.getAccountId() +
+                    ", Name: " + a.getAccountHolderName() +
+                    ", Balance: " + a.getAccountBalance() +
+                    ", Type: " + a.getAccountType());
+        }
+    }
+}
+```
+
+---
+
