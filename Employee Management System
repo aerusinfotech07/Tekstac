@@ -1,0 +1,263 @@
+
+# ✅ Employee Management System
+
+## 🧾 Problem Statement
+
+Develop a Java application to manage employee details using three classes:
+`Employee`, `EmployeeUtil`, and `UserInterface`.
+
+---
+
+## 👨‍💼 Class 1: Employee
+
+Create a class named `Employee` with the following private attributes:
+
+* `int employeeId` – unique identifier of the employee
+* `String employeeName` – name of the employee
+* `double employeeSalary` – salary of the employee
+* `String department` – department of the employee (IT/HR/Finance)
+
+### Requirements:
+
+* All attributes must be **private**
+* Provide **public getter and setter methods**
+* ❌ No business logic in this class
+
+---
+
+## 🛠️ Class 2: EmployeeUtil
+
+Create a utility class named `EmployeeUtil`.
+
+### Attribute:
+
+* `List<Employee> employeeList` – stores employee objects
+
+### Methods:
+
+1. **addEmployee(Employee employee)**
+
+   * Adds the given employee object to the list
+
+2. **getEmployeeById(int id)**
+
+   * Returns the Employee object whose `employeeId` matches the given id
+   * Returns `null` if no matching employee is found
+
+3. **getMaxSalaryEmployees()**
+
+   * Finds the **maximum salary** among all employees
+   * Returns a `List<Employee>` containing all employees with that maximum salary
+   * If the list is empty, return an empty list
+
+---
+
+## 🖥️ Class 3: UserInterface
+
+Create a class `UserInterface` with the `main` method.
+
+---
+
+## 📥 Input Format
+
+The employee details must be entered as one string using `:` as a separator:
+
+```id="n3k7xp"
+employeeId:employeeName:employeeSalary:department
+```
+
+### Example:
+
+```id="d4m9qz"
+101:Rahul:50000:IT
+```
+
+---
+
+## 📌 Responsibilities:
+
+* Read the number of employees
+* For each employee:
+
+  * Read details in **single string format**
+  * Split the string and set values into an `Employee` object
+  * Add employee object to `EmployeeUtil`
+* Search an employee by ID
+* Display employee details if found
+* Display employee(s) having the **maximum salary**
+* Display appropriate message if not found
+
+---
+
+## 🧪 Sample Input
+
+```id="w8p2yc"
+Enter number of employees:
+3
+
+Enter employee details:
+101:Rahul:50000:IT
+102:Amit:75000:HR
+103:Neha:75000:Finance
+
+Enter employee ID to search:
+102
+```
+
+---
+
+## 📤 Sample Output
+
+```id="u6j1rm"
+Employee Found:
+Employee ID: 102
+Employee Name: Amit
+Employee Salary: 75000.0
+Department: HR
+
+Employees with Maximum Salary:
+Employee ID: 102, Name: Amit, Salary: 75000.0, Department: HR
+Employee ID: 103, Name: Neha, Salary: 75000.0, Department: Finance
+```
+
+---
+
+# 💻 Complete Java Solution
+
+```java id="9xk4tz"
+import java.util.*;
+
+// Class 1: Employee
+class Employee {
+    private int employeeId;
+    private String employeeName;
+    private double employeeSalary;
+    private String department;
+
+    public int getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+
+    public double getEmployeeSalary() {
+        return employeeSalary;
+    }
+
+    public void setEmployeeSalary(double employeeSalary) {
+        this.employeeSalary = employeeSalary;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+}
+
+// Class 2: EmployeeUtil
+class EmployeeUtil {
+    private List<Employee> employeeList = new ArrayList<>();
+
+    public void addEmployee(Employee employee) {
+        employeeList.add(employee);
+    }
+
+    public Employee getEmployeeById(int id) {
+        for (Employee e : employeeList) {
+            if (e.getEmployeeId() == id) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    public List<Employee> getMaxSalaryEmployees() {
+        List<Employee> result = new ArrayList<>();
+
+        if (employeeList.isEmpty()) {
+            return result;
+        }
+
+        double max = employeeList.get(0).getEmployeeSalary();
+
+        for (Employee e : employeeList) {
+            if (e.getEmployeeSalary() > max) {
+                max = e.getEmployeeSalary();
+            }
+        }
+
+        for (Employee e : employeeList) {
+            if (e.getEmployeeSalary() == max) {
+                result.add(e);
+            }
+        }
+
+        return result;
+    }
+}
+
+// Class 3: UserInterface
+public class UserInterface {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        EmployeeUtil util = new EmployeeUtil();
+
+        System.out.println("Enter number of employees:");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Enter employee details:");
+        for (int i = 0; i < n; i++) {
+            String input = sc.nextLine();
+            String[] data = input.split(":");
+
+            Employee e = new Employee();
+            e.setEmployeeId(Integer.parseInt(data[0]));
+            e.setEmployeeName(data[1]);
+            e.setEmployeeSalary(Double.parseDouble(data[2]));
+            e.setDepartment(data[3]);
+
+            util.addEmployee(e);
+        }
+
+        System.out.println("Enter employee ID to search:");
+        int searchId = sc.nextInt();
+
+        Employee found = util.getEmployeeById(searchId);
+
+        if (found != null) {
+            System.out.println("\nEmployee Found:");
+            System.out.println("Employee ID: " + found.getEmployeeId());
+            System.out.println("Employee Name: " + found.getEmployeeName());
+            System.out.println("Employee Salary: " + found.getEmployeeSalary());
+            System.out.println("Department: " + found.getDepartment());
+        } else {
+            System.out.println("Employee not found");
+        }
+
+        List<Employee> maxList = util.getMaxSalaryEmployees();
+
+        System.out.println("\nEmployees with Maximum Salary:");
+        for (Employee e : maxList) {
+            System.out.println("Employee ID: " + e.getEmployeeId() +
+                    ", Name: " + e.getEmployeeName() +
+                    ", Salary: " + e.getEmployeeSalary() +
+                    ", Department: " + e.getDepartment());
+        }
+    }
+}
+```
+
