@@ -1,0 +1,265 @@
+
+# ✅ Course Management System
+
+## 🧾 Problem Statement
+
+Develop a Java application to manage course details using three classes:
+`Course`, `CourseUtil`, and `UserInterface`.
+
+---
+
+## 📘 Class 1: Course
+
+Create a class named `Course` with the following private attributes:
+
+* `int courseId` – unique identifier of the course
+* `String courseName` – name of the course
+* `double courseFee` – fee of the course
+* `String courseType` – type of course (online/offline)
+
+### Requirements:
+
+* All attributes must be **private**
+* Provide **public getter and setter methods**
+* ❌ No business logic in this class
+
+---
+
+## 🛠️ Class 2: CourseUtil
+
+Create a utility class named `CourseUtil`.
+
+### Attribute:
+
+* `List<Course> courseList` – stores course objects
+
+### Methods:
+
+1. **addCourse(Course course)**
+
+   * Adds the given course object to the list
+
+2. **getCourseById(int id)**
+
+   * Returns the Course object whose `courseId` matches the given id
+   * Returns `null` if no matching course is found
+
+3. **getMaxFeeCourses()**
+
+   * Finds the **maximum course fee** among all courses
+   * Returns a `List<Course>` containing all courses with that maximum fee
+   * If the list is empty, return an empty list
+
+---
+
+## 🖥️ Class 3: UserInterface
+
+Create a class `UserInterface` with the `main` method.
+
+---
+
+## 📥 Input Format
+
+The course details must be entered as one string using `:` as a separator:
+
+```id="0k0o6m"
+courseId:courseName:courseFee:courseType
+```
+
+### Example:
+
+```id="2b7s6x"
+101:Java:15000:online
+```
+
+---
+
+## 📌 Responsibilities:
+
+* Read the number of courses
+* For each course:
+
+  * Read details in **single string format**
+  * Split the string and set values into a `Course` object
+  * Add course object to `CourseUtil`
+* Search a course by ID
+* Display course details if found
+* Display course(s) having the **maximum fee**
+* Display appropriate message if not found
+
+---
+
+## 🧪 Sample Input
+
+```id="4j4s9z"
+Enter number of courses:
+3
+
+Enter course details:
+101:Java:15000:online
+102:Python:20000:offline
+103:AWS:20000:online
+
+Enter course ID to search:
+102
+```
+
+---
+
+## 📤 Sample Output
+
+```id="1i1gqz"
+Course Found:
+Course ID: 102
+Course Name: Python
+Course Fee: 20000.0
+Course Type: offline
+
+Course(s) with Maximum Fee:
+Course ID: 102, Name: Python, Fee: 20000.0, Type: offline
+Course ID: 103, Name: AWS, Fee: 20000.0, Type: online
+```
+
+---
+
+# 💻 Complete Java Solution
+
+```java id="6hlx7l"
+import java.util.*;
+
+// Class 1: Course
+class Course {
+    private int courseId;
+    private String courseName;
+    private double courseFee;
+    private String courseType;
+
+    public int getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public double getCourseFee() {
+        return courseFee;
+    }
+
+    public void setCourseFee(double courseFee) {
+        this.courseFee = courseFee;
+    }
+
+    public String getCourseType() {
+        return courseType;
+    }
+
+    public void setCourseType(String courseType) {
+        this.courseType = courseType;
+    }
+}
+
+// Class 2: CourseUtil
+class CourseUtil {
+    private List<Course> courseList = new ArrayList<>();
+
+    public void addCourse(Course course) {
+        courseList.add(course);
+    }
+
+    public Course getCourseById(int id) {
+        for (Course c : courseList) {
+            if (c.getCourseId() == id) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public List<Course> getMaxFeeCourses() {
+        List<Course> result = new ArrayList<>();
+
+        if (courseList.isEmpty()) {
+            return result;
+        }
+
+        double max = courseList.get(0).getCourseFee();
+
+        for (Course c : courseList) {
+            if (c.getCourseFee() > max) {
+                max = c.getCourseFee();
+            }
+        }
+
+        for (Course c : courseList) {
+            if (c.getCourseFee() == max) {
+                result.add(c);
+            }
+        }
+
+        return result;
+    }
+}
+
+// Class 3: UserInterface
+public class UserInterface {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        CourseUtil util = new CourseUtil();
+
+        System.out.println("Enter number of courses:");
+        int n = sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Enter course details:");
+        for (int i = 0; i < n; i++) {
+            String input = sc.nextLine();
+            String[] data = input.split(":");
+
+            Course c = new Course();
+            c.setCourseId(Integer.parseInt(data[0]));
+            c.setCourseName(data[1]);
+            c.setCourseFee(Double.parseDouble(data[2]));
+            c.setCourseType(data[3]);
+
+            util.addCourse(c);
+        }
+
+        System.out.println("Enter course ID to search:");
+        int searchId = sc.nextInt();
+
+        Course found = util.getCourseById(searchId);
+
+        if (found != null) {
+            System.out.println("\nCourse Found:");
+            System.out.println("Course ID: " + found.getCourseId());
+            System.out.println("Course Name: " + found.getCourseName());
+            System.out.println("Course Fee: " + found.getCourseFee());
+            System.out.println("Course Type: " + found.getCourseType());
+        } else {
+            System.out.println("Course not found");
+        }
+
+        List<Course> maxList = util.getMaxFeeCourses();
+
+        System.out.println("\nCourse(s) with Maximum Fee:");
+        for (Course c : maxList) {
+            System.out.println("Course ID: " + c.getCourseId() +
+                    ", Name: " + c.getCourseName() +
+                    ", Fee: " + c.getCourseFee() +
+                    ", Type: " + c.getCourseType());
+        }
+    }
+}
+```
+
+---
+
