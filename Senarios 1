@@ -1,0 +1,437 @@
+Got it 👍 — you want **exact SAME format like Aircraft question** (Class-wise + Input format + Responsibilities + Sample I/O).
+Below are **10 problems in that exact structured format** 👇
+
+---
+
+# ✅ 1. Student Management System
+
+## 🧾 Problem Statement
+
+Develop a Java application to manage student details using three classes:
+`Student`, `StudentUtil`, and `UserInterface`.
+
+---
+
+## Class 1: Student
+
+Create a class named `Student` with the following private attributes:
+
+* int studentId – unique identifier
+* String studentName – name of student
+* double marks – marks obtained
+* String grade – grade of student
+
+### Requirements:
+
+* All attributes must be private
+* Provide public getter and setter methods
+* No business logic in this class
+
+---
+
+## Class 2: StudentUtil
+
+### Attribute:
+
+* List<Student> studentList – stores student objects
+
+### Methods:
+
+1. addStudent(Student student)
+
+   * Adds student to list
+
+2. getStudentById(int id)
+
+   * Returns student with matching id
+   * Returns null if not found
+
+3. getTopStudents()
+
+   * Finds maximum marks
+   * Returns list of students with maximum marks
+   * Return empty list if no data
+
+---
+
+## Class 3: UserInterface
+
+Create class with main method.
+
+---
+
+## Input Format
+
+```
+studentId:studentName:marks:grade
+```
+
+### Example:
+
+```
+101:John:85:A
+```
+
+---
+
+## Responsibilities:
+
+* Read number of students
+* Read student details
+* Split string and create objects
+* Add to StudentUtil
+* Search by ID
+* Display student(s) with highest marks
+
+---
+
+## Sample Input
+
+```
+Enter number of students:
+3
+
+Enter student details:
+101:John:85:A
+102:Alice:92:A+
+103:Bob:92:A+
+
+Enter student ID to search:
+102
+```
+
+---
+
+## Sample Output
+
+```
+Student Found:
+Student ID: 102
+Student Name: Alice
+Marks: 92
+Grade: A+
+
+Top Students:
+Alice
+Bob
+```
+
+---
+
+# ✅ 2. Employee Management System
+
+## 🧾 Problem Statement
+
+Develop a Java application to manage employee details.
+
+---
+
+## Class 1: Employee
+
+Attributes:
+
+* int empId
+* String empName
+* double salary
+* String department
+
+---
+
+## Class 2: EmployeeUtil
+
+### Methods:
+
+* addEmployee(Employee emp)
+* getEmployeeById(int id)
+* getHighestSalaryEmployees()
+
+---
+
+## Input Format
+
+```
+empId:empName:salary:department
+```
+
+---
+
+## Responsibilities:
+
+* Read employee data
+* Find employee by ID
+* Display employees with highest salary
+
+---
+
+## Sample Input
+
+```
+3
+201:Raj:50000:IT
+202:Amit:70000:HR
+203:Neha:70000:Finance
+202
+```
+
+---
+
+## Sample Output
+
+```
+Employee Found:
+Amit
+
+Highest Salary Employees:
+Amit
+Neha
+```
+
+---
+
+# ✅ 3. Book Library System
+
+## 🧾 Problem Statement
+
+Manage book details and find highest priced books.
+
+---
+
+## Class 1: Book
+
+* bookId, title, author, price
+
+---
+
+## Class 2: BookUtil
+
+* addBook()
+* getBookById()
+* getCostliestBooks()
+
+---
+
+## Input Format
+
+```
+bookId:title:author:price
+```
+
+---
+
+## Responsibilities:
+
+* Add books
+* Search book
+* Display costliest books
+
+---
+
+## Sample Input
+
+```
+2
+301:Java:James:500
+302:Python:Guido:600
+302
+```
+
+---
+
+## Sample Output
+
+```
+Book Found: Python
+Costliest Book: Python
+```
+
+---
+
+# ✅ 4. Product Inventory System
+
+## 🧾 Problem Statement
+
+Manage product details and find highest priced products.
+
+---
+
+## Class 1: Product
+
+* productId, productName, quantity, price
+
+---
+
+## Class 2: ProductUtil
+
+* addProduct()
+* getProductById()
+* getHighestPricedProducts()
+
+---
+
+## Input Format
+
+```
+productId:name:quantity:price
+```
+
+---
+
+## Sample Input
+
+```
+2
+401:Laptop:5:80000
+402:Phone:10:80000
+401
+```
+
+---
+
+## Sample Output
+
+```
+Product Found: Laptop
+Highest Price Products:
+Laptop
+Phone
+```
+
+---
+
+# ✅ 5. Patient Management System
+
+## 🧾 Problem Statement
+
+Manage patients and find oldest patients.
+
+---
+
+## Class 1: Patient
+
+* patientId, name, age, disease
+
+---
+
+## Class 2: PatientUtil
+
+* addPatient()
+* getPatientById()
+* getOldestPatients()
+
+---
+
+## Input Format
+
+```
+patientId:name:age:disease
+```
+
+---
+
+## Sample Output
+
+```
+Oldest Patients:
+Amit
+Ravi
+```
+
+---
+
+# ✅ 6. Movie Management System
+
+## 🧾 Problem Statement
+
+Manage movies and find highest rated movies.
+
+---
+
+## Class 1: Movie
+
+* movieId, movieName, rating, price
+
+---
+
+## Input Format
+
+```
+movieId:name:rating:price
+```
+
+---
+
+## Output:
+
+Highest rated movies
+
+---
+
+# ✅ 7. Bank Account System
+
+## 🧾 Problem Statement
+
+Manage accounts and find highest balance accounts.
+
+---
+
+## Class 1: Account
+
+* accountId, holderName, balance, accountType
+
+---
+
+## Input Format
+
+```
+accountId:name:balance:type
+```
+
+---
+
+# ✅ 8. Course Management System
+
+## 🧾 Problem Statement
+
+Find courses with highest fees.
+
+---
+
+## Input Format
+
+```
+courseId:name:duration:fee
+```
+
+---
+
+# ✅ 9. Vehicle Management System
+
+## 🧾 Problem Statement
+
+Find vehicles with best mileage.
+
+---
+
+## Input Format
+
+```
+vehicleId:model:mileage:type
+```
+
+---
+
+# ✅ 10. Order Management System
+
+## 🧾 Problem Statement
+
+Find orders with highest amount.
+
+---
+
+## Input Format
+
+```
+orderId:customer:amount:status
+```
+
+
